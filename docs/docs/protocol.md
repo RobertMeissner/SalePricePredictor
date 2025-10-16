@@ -90,6 +90,7 @@ bis hierhin noch raw data
   - feature engineering
 
 research
+
 - how 2 orchestration layer
 - other suitable, template, focussed on data science: https://github.com/drivendataorg/cookiecutter-data-science
 - dagster vs kedro vs Apache Airflow
@@ -100,3 +101,5 @@ research
 - MLFlow
   - might be overkill, aber ich wollte das schon länger ausprobieren
   - Experiment Tracking, Pipeline -> gut
+
+switched to ccds template, s.o.

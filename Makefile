@@ -46,21 +46,9 @@ test:
 	python -m pytest tests
 
 
-## Set up Python interpreter environment
-.PHONY: create_environment
-create_environment:
-	uv venv --python $(PYTHON_VERSION)
-	@echo ">>> New uv virtual environment created. Activate with:"
-	@echo ">>> Windows: .\\\\.venv\\\\Scripts\\\\activate"
-	@echo ">>> Unix/macOS: source ./.venv/bin/activate"
-	
-
-
-
 #################################################################################
 # PROJECT RULES                                                                 #
 #################################################################################
-
 
 ## Make dataset
 .PHONY: data
@@ -85,3 +73,8 @@ export PRINT_HELP_PYSCRIPT
 
 help:
 	@$(PYTHON_INTERPRETER) -c "${PRINT_HELP_PYSCRIPT}" < $(MAKEFILE_LIST)
+
+
+.PHONY: docs
+docs:
+	cd docs && uv run mkdocs build && uv run mkdocs serve

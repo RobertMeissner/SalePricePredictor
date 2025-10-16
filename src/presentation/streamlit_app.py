@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 import polars as pl
 import streamlit as st
 
-from app.utils.settings import RAW_DATA_FILENAME
+from src.config import RAW_DATA_DIR, RAW_DATA_FILENAME
 
 # Page configuration
 st.set_page_config(
@@ -14,8 +14,7 @@ st.set_page_config(
 
 # Constants
 
-DATA_FOLDER = Path("../data")
-DATA_PATH = DATA_FOLDER / RAW_DATA_FILENAME
+DATA_PATH = RAW_DATA_DIR / RAW_DATA_FILENAME
 
 
 @st.cache_data
