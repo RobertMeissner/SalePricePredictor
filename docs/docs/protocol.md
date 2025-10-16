@@ -9,7 +9,7 @@ Der Datensatz besteht aus 79 erklärenden Variablen und der Zielvariable SalePri
 Es sollen die Daten verarbeitet werden, ein oder mehrere KI-Modelle trainiert werden und im Anschluss diese evaluiert werden.
 
 Obwohl es sich hierbei um ein Data Science-Aufgabe handelt, liegt der Fokus nicht auf diesem Gebiet. Die Aufgabe ist so gewählt, weil unser Team in diesem Themengebiet arbeitet. Jedoch werden zukünftige Aufgaben nicht direkt diesen Bereich betreffen.
-Der Fokus in der Umsetzung dieser Aufgabe soll daher weiterhin auf Softwareentwicklung liegen. 
+Der Fokus in der Umsetzung dieser Aufgabe soll daher weiterhin auf Softwareentwicklung liegen.
 
 Hilfreiche Packages:
 Pandas zur Datenverarbeitung
@@ -73,7 +73,7 @@ Beobachtungen, raw, unprocessed data
 - unkorreliert, d.h. corr around 0
   - OverallCond
   - BsmtFinSF2
-  - id :D 
+  - id :D
   - und einige andere
 
 heatmap
@@ -84,7 +84,7 @@ heatmap
       - Fireplaces + GarageCars?
 
 bis hierhin noch raw data
-- keine 
+- keine
   - normalization
   - imputation
   - feature engineering
@@ -103,3 +103,19 @@ research
   - Experiment Tracking, Pipeline -> gut
 
 switched to ccds template, s.o.
+
+mlflow for experiment handling
+
+R2, MSE, MAE
+- reagieren unterschiedlich auf e.g., outlier, vorerst in Ordnung
+
+linear regression
+- Warum?
+  - einfachste Startannahme
+  - alle Polynome können auf lineare fits in bestimmten Bereichen ge-taylor-ed werden
+    - falls linear nicht passt, sollten bestimmte Bereiche überhaupt nicht passen, e.g., outlier
+
+These
+- Datenqualität ist vorerst der relevante Weg um R2 zu erhöhen.
+- baseline 0.7x -> mindestens 0.8, eher 0.9
+  - Hürde "kitchen sink regression"?
