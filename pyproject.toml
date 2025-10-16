@@ -1,0 +1,48 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "src"
+version = "0.0.1"
+description = "predict house sale prices"
+authors = [
+  { name = "Robert Mei\u00dfner" },
+]
+license = { file = "LICENSE" }
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License"
+]
+dependencies = [
+    "loguru",
+    "mkdocs",
+    "myapplication>=0.1.0",
+    "notebook>=7.4.7",
+    "numpy>=2.3.4",
+    "pandas>=2.3.3",
+    "pip",
+    "plotly>=6.3.1",
+    "pytest",
+    "python-dotenv",
+    "ruff",
+    "scikit-learn>=1.7.2",
+    "tqdm",
+    "typer",
+]
+requires-python = "~=3.12.0"
+
+
+[tool.ruff]
+line-length = 99
+src = ["src"]
+include = ["pyproject.toml", "src/**/*.py"]
+
+[tool.ruff.lint]
+extend-select = ["I"]  # Add import sorting
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+force-sort-within-sections = true
+
