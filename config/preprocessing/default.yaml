@@ -1,0 +1,51 @@
+# Default preprocessing pipeline configuration
+
+name: default
+description: Standard preprocessing with sklearn components
+
+# Configuration Data
+# ------------------
+
+drop_columns: &drop_columns_list
+  - PoolQC
+  - MiscFeature
+  - Alley
+  - Fence
+  - LotFrontage
+
+categorical_transforms:
+  FireplaceQu: &fireplace_mapping
+    type: binary
+    description: "Fireplace quality: Good (Ex/TA/Gd) → 1, Bad/None → 0"
+    mapping:
+      Ex: 1
+      TA: 1
+      Gd: 1
+      Fa: 0
+      Po: 0
+      "None": 0
+    null_value: 0
+
+imputation:
+  numerical_strategy: median
+  categorical_strategy: mode
+  exclude_columns: &exclude_columns
+    - Id
+    - SalePrice
+
+scaling:
+  strategy: standard  # StandardScaler - normalize using mean & std
+  exclude_columns: *exclude_columns
+
+# Pipeline step definition
+# --------------------
+
+pipeline:
+  - step: drop_columns
+    name: drop_columns
+
+  - step: domain_mappings
+    name: domain_mappings
+
+  - step: impute_and_scale
+    name: impute_and_scale

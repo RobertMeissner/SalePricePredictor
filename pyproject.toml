@@ -7,7 +7,7 @@ name = "src"
 version = "0.0.1"
 description = "predict house sale prices"
 authors = [
-  { name = "Robert Mei\u00dfner" },
+    { name = "Robert Mei\u00dfner" },
 ]
 license = { file = "LICENSE" }
 readme = "README.md"
@@ -16,6 +16,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License"
 ]
 dependencies = [
+    "hydra-core>=1.3.0",
     "loguru",
     "mkdocs",
     "mlflow>=3.4.0",
@@ -55,3 +56,6 @@ dev = [
     "streamlit>=1.50.0",
 ]
 
+[tool.isort]
+profile = "black"
+src_paths = ["src", "test"]

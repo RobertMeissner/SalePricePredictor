@@ -30,10 +30,11 @@ repos:
           - --fix
       - id: ruff-format
   - repo: https://github.com/PyCQA/isort
-    rev: 6.0.1
+    rev: 7.0.0
     hooks:
       - id: isort
         args: [ "--settings-path=pyproject.toml" ]
+        stages: ["manual"]
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.1
     hooks:

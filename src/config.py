@@ -8,7 +8,7 @@ load_dotenv()
 
 # Paths
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-logger.info(f"PROJ_ROOT path is: {PROJECT_ROOT}")
+logger.debug(f"PROJ_ROOT path is: {PROJECT_ROOT}")
 
 DATA_DIR = PROJECT_ROOT / "data"
 RAW_DATA_DIR = DATA_DIR / "raw"
@@ -23,16 +23,24 @@ FIGURES_DIR = REPORTS_DIR / "figures"
 
 MLFLOW_TRACKING_URI = PROJECT_ROOT / "mlruns"
 
+# Hydra config path MUST be relative
+CONFIG_DIR = "../config"
+
 # Files
 
 RAW_DATA = "raw.csv"
+INTERIM_DATA_FILENAME = "interim.parquet"
+INTERIM_METADATA_FILENAME = "interim_metadata.json"
 
 # If tqdm is installed, configure loguru with tqdm.write
 # https://github.com/Delgan/loguru/issues/135
 try:
     from tqdm import tqdm
 
-    logger.remove(0)
+    try:
+        logger.remove(0)
+    except ValueError:
+        pass
     logger.add(lambda msg: tqdm.write(msg, end=""), colorize=True)
 except ModuleNotFoundError:
     pass

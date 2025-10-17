@@ -136,3 +136,38 @@ see code `notebooks/data.ipynb`
 intermediate dataset
 - numerische Werte skaliert von 0.0 bis 1.0
 - kategorische Werte transformiert in numerische Werte
+
+interim data
+- als Apache Parquet: für unsere Daten nicht relevant, aber für große Daten performant, spalten-Kompression
+  - .parquet
+
+general issue
+- who does what work when?
+- data scientist
+  - runs experiments
+  - looks at data
+  - decides abotu models, preprocessing, cleanup
+- data engineer
+  - supplies infrastructure
+    - e.g. parquet vs. postgres vs vectordb
+  - supplies raw data connectors
+    - e.g. anti corruption layer to the outside
+- business analyst
+  - supplies customer requirements
+    - e.g. quality gate, accuracy, user acceptance tests
+    - specs
+- product owner
+  - end-2-end
+
+missing parts
+- model serving
+- model export
+  - e.g. mlflow does this already, pickle, ONNX, bento
+  - publish to AWS Sagemaker/Azure ML/Google Vertex AI?
+  - export for now via mlflow
+
+future proofing enabled by
+- PreProcessingPipeline(Pipeline)
+  - dev's use this class and expect similar interface to sklearn.pipeline. Adding logging, monitoring etc. is hidden
+- happy path mostly
+  - I currently not handle errors -> see what works for now and harden around that

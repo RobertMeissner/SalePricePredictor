@@ -2,9 +2,9 @@ import mlflow
 import pandas as pd
 import plotly.express as px
 
-from config import MLFLOW_TRACKING_URI
+from utils.mlflow_setup import setup_mlflow
 
-mlflow.set_tracking_uri(f"file:{MLFLOW_TRACKING_URI}")
+setup_mlflow()
 client = mlflow.tracking.MlflowClient()
 experiment = client.get_experiment_by_name(name="house-pricing")
 runs = client.search_runs(experiment.experiment_id)

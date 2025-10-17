@@ -6,10 +6,10 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
-from adapters.load import raw
-from config import MLFLOW_TRACKING_URI
+from src.adapters.load import raw
+from utils.mlflow_setup import setup_mlflow
 
-mlflow.set_tracking_uri(f"file:{MLFLOW_TRACKING_URI}")
+setup_mlflow()
 mlflow.set_experiment("house-pricing")
 
 df = raw()
@@ -38,6 +38,10 @@ with mlflow.start_run(run_name="baseline"):
 
     model = LinearRegression()
     model.fit(x_train, y_train)
+
+    mlflow.sklearn.log_model(
+        model, name="hhouse_pricing_model", registered_model_name="HousePricing"
+    )
 
     y_pred = model.predict(x_test)
     test_r2 = r2_score(y_test, y_pred)
