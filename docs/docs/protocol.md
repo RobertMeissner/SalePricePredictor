@@ -119,3 +119,20 @@ These
 - Datenqualität ist vorerst der relevante Weg um R2 zu erhöhen.
 - baseline 0.7x -> mindestens 0.8, eher 0.9
   - Hürde "kitchen sink regression"?
+
+
+### 20251017
+
+Vertrauen in die Daten aktuell gering
+- 1460 Zeilen, 81 Spalten
+- 19 unvollständige Spalten
+  - 4 mit wneiger als 20% Werten überhaupt, 6 mit weniger als 90%
+  - These: >50%, idealerweise >90% an Werten nötig für gescheite Imputation
+
+see code `notebooks/data.ipynb`
+- FireplaceQU needs feature engineering, the rest can go away
+- ist ein Beispiel wie ich mit kategorischen Werten umgehen kann
+
+intermediate dataset
+- numerische Werte skaliert von 0.0 bis 1.0
+- kategorische Werte transformiert in numerische Werte
