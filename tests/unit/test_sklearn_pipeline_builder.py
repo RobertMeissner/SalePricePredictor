@@ -32,7 +32,7 @@ class TestSklearnPipelineBuilder:
             {
                 "Id": [1, 2, 3],
                 "PoolQC": ["Ex", "Gd", None],  # Should be dropped
-                "FireplaceQu": ["Ex", "Fa", None],  # Should be mapped
+                "FireplaceQu": ["Ex", "Fa", None],  # Should be mapped then scaled
                 "LotArea": [8000, 9600, 11250],
                 "SalePrice": [200000, 250000, 300000],
             }
@@ -44,10 +44,51 @@ class TestSklearnPipelineBuilder:
         # Validate drops happened
         assert "PoolQC" not in df_transformed.columns
 
-        # Validate FireplaceQu was mapped (Ex→1, Fa→0, None→0)
+        # Validate FireplaceQu was mapped and scaled
         assert "FireplaceQu" in df_transformed.columns
-        assert df_transformed["FireplaceQu"].tolist() == [1, 0, 0]
+        # After mapping (Ex→1, Fa→0, None→0) and scaling, mean should be ~0
+        assert abs(df_transformed["FireplaceQu"].mean()) < 1e-10
 
         # Validate other columns remain
         assert "Id" in df_transformed.columns
         assert "LotArea" in df_transformed.columns
+
+    def test_pipeline_with_imputation_and_scaling(self):
+        """Test pipeline with all steps: drops, transforms, imputation, and scaling."""
+        config_dir = PROJECT_ROOT / "tests" / "config"
+        cfg = load_config(config_dir, "experiment")
+
+        # Create toy data with nulls
+        df = pd.DataFrame(
+            {
+                "Id": [1, 2, 3, 4],
+                "PoolQC": ["Ex", None, "Gd", None],  # Should be dropped
+                "FireplaceQu": ["Ex", "Fa", None, "Gd"],  # Should be mapped
+                "LotArea": [8000, None, 11250, 9600],  # Should be imputed and scaled
+                "YearBuilt": [2000, 2010, None, 1995],  # Should be imputed and scaled
+                "SalePrice": [200000, 250000, 300000, 275000],  # Should be excluded from scaling
+            }
+        )
+
+        pipeline = build_pipeline(cfg)
+        df_transformed = pipeline.fit_transform(df)
+
+        # Validate drops
+        assert "PoolQC" not in df_transformed.columns
+
+        # Validate categorical mapping and scaling
+        # FireplaceQu is mapped (Ex→1, Fa→0, None→0, Gd→1) then scaled
+        assert "FireplaceQu" in df_transformed.columns
+        # After scaling, numeric columns have mean ~0
+        assert abs(df_transformed["FireplaceQu"].mean()) < 1e-10
+
+        # Validate imputation - no nulls remain in LotArea and YearBuilt
+        assert not df_transformed["LotArea"].isnull().any()
+        assert not df_transformed["YearBuilt"].isnull().any()
+
+        # Validate scaling - LotArea, YearBuilt, and FireplaceQu should be scaled (mean ~0, std ~1)
+        # but Id and SalePrice should not be scaled (they're in exclude_columns)
+        assert abs(df_transformed["LotArea"].mean()) < 1e-10  # Close to 0
+        assert abs(df_transformed["YearBuilt"].mean()) < 1e-10
+        assert df_transformed["Id"].mean() == 2.5  # Original scale: (1+2+3+4)/4
+        assert df_transformed["SalePrice"].mean() == 256250  # Original scale

@@ -2,7 +2,6 @@ from dotenv import load_dotenv
 import hydra
 from hydra import compose, initialize
 from loguru import logger
-from services.simple_experiment_run import simple_experiment
 import typer
 
 from config import CONFIG_DIR
@@ -47,8 +46,12 @@ def feature(config: str = "default") -> None:
 
 @app.command("experiment")
 @hydra.main(version_base="1.3")
-def experiment() -> None:
-    simple_experiment()
+def experiment(name: str = "experiment") -> None:
+    # TODO: Repository pattern, depends for data
+    #   wrap MLFlow stuff (?)
+    #   execute pipeline non-blocking?
+    # TODO: Add more data to experiment yaml, cover more data
+    pass
 
 
 if __name__ == "__main__":
