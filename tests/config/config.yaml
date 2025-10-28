@@ -1,4 +1,4 @@
 defaults:
-  - preprocessing: default
+  - experiment: experiment.yaml
   - _self_
 save: true

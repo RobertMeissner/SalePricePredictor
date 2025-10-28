@@ -1,79 +1,43 @@
-#################################################################################
-# GLOBALS                                                                       #
-#################################################################################
-
-PROJECT_NAME = salepricepredictor
-PYTHON_VERSION = 3.12
-PYTHON_INTERPRETER = python
-
-#################################################################################
-# COMMANDS                                                                      #
-#################################################################################
-
-
-## Install Python dependencies
 .PHONY: requirements
 requirements:
 	uv sync
-	
 
 
-
-## Delete all compiled Python files
 .PHONY: clean
 clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
 
+.PHONY: check
+check: lint format
 
-## Lint using ruff (use `make format` to do formatting)
 .PHONY: lint
 lint:
 	ruff format --check
 	ruff check
 
-## Format source code with ruff
 .PHONY: format
 format:
 	ruff check --fix
 	ruff format
 
 
-
-## Run tests
 .PHONY: test
 test:
-	python -m pytest tests
+	python -m pytest tests -v
 
 
-#################################################################################
-# PROJECT RULES                                                                 #
-#################################################################################
+## Run preprocessing pipeline
+.PHONY: preprocess
+preprocess:
+	uv run -m src.main preprocess
 
-## Make dataset
-.PHONY: data
-data: requirements
-	$(PYTHON_INTERPRETER) src/dataset.py
-
-
-#################################################################################
-# Self Documenting Commands                                                     #
-#################################################################################
+## Train default model
+.PHONY: train
+train:
+	uv run -m src.main train
 
 .DEFAULT_GOAL := help
-
-define PRINT_HELP_PYSCRIPT
-import re, sys; \
-lines = '\n'.join([line for line in sys.stdin]); \
-matches = re.findall(r'\n## (.*)\n[\s\S]+?\n([a-zA-Z_-]+):', lines); \
-print('Available rules:\n'); \
-print('\n'.join(['{:25}{}'.format(*reversed(match)) for match in matches]))
-endef
-export PRINT_HELP_PYSCRIPT
-
-help:
-	@$(PYTHON_INTERPRETER) -c "${PRINT_HELP_PYSCRIPT}" < $(MAKEFILE_LIST)
-
 
 .PHONY: docs
 docs:

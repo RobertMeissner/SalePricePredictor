@@ -40,7 +40,7 @@ with mlflow.start_run(run_name="baseline"):
     model.fit(x_train, y_train)
 
     mlflow.sklearn.log_model(
-        model, name="hhouse_pricing_model", registered_model_name="HousePricing"
+        model, name="house_pricing_model", registered_model_name="HousePricing"
     )
 
     y_pred = model.predict(x_test)
