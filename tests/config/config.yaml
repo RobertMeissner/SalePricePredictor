@@ -1,4 +1,4 @@
 defaults:
-  - experiment: experiment.yaml
+  - experiment.yaml
   - _self_
 save: true

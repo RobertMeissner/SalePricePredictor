@@ -12,7 +12,7 @@ preprocessing:
     - LotFrontage
 
   categorical_transforms:
-  FireplaceQu:
+    FireplaceQu:
       type: binary
       description: "Fireplace quality: Good (Ex/TA/Gd) → 1, Bad/None → 0"
       mapping:
