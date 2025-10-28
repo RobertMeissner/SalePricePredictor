@@ -42,3 +42,7 @@ train:
 .PHONY: docs
 docs:
 	cd docs && uv run mkdocs build && uv run mkdocs serve
+
+.PHONY: mlflow
+mlflow:
+	uv run mlflow ui
