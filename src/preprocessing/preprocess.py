@@ -19,15 +19,6 @@ def run_preprocessing(
 
     Returns:
         pd.DataFrame: Preprocessed dataframe
-
-    Example:
-        >>> from src.adapters.factory import create_data_repository
-        >>> from src.config_parser import load_config
-        >>> from config import CONFIG_DIR
-        >>>
-        >>> config = load_config(CONFIG_DIR, "config")
-        >>> repository = create_data_repository(config)
-        >>> df = run_preprocessing(config, repository, save=True)
     """
     # Load data through injected repository
     df = data_repository.load_raw()

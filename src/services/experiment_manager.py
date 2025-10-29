@@ -1,6 +1,6 @@
-from src.adapters.simple_experiment import SimpleExperiment
 from src.domain.models.experiment_models import ExperimentSetup
 from src.domain.ports.experiment import Experiment
+from src.services.simple_experiment import SimpleExperiment
 
 
 class ExperimentManager:

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from src.config_parser import load_config
+from src.config.hydra_loader import load_config
 from src.preprocessing.sklearn_pipeline_builder import build_pipeline
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]

@@ -1,17 +1,27 @@
+from dataclasses import dataclass
+
 import mlflow
+import pandas as pd
 from sklearn.linear_model import Lasso, LinearRegression, Ridge
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
-from config import CONFIG_DIR
-from domain.models.experiment_models import MetricsModel
 from src.adapters.factory import create_data_repository
+from src.config import CONFIG_DIR
 from src.config_parser import load_config
 from src.preprocessing.sklearn_pipeline_builder import build_pipeline
 from src.utils.mlflow_setup import setup_mlflow
 
 
-def metrics(_metrics: MetricsModel) -> None:
+@dataclass(frozen=True)
+class MetricsInput:
+    x_test: pd.DataFrame
+    y_test: pd.DataFrame
+    mlflow: mlflow
+    model: LinearRegression
+
+
+def metrics(_metrics: MetricsInput) -> None:
     y_pred = _metrics.model.predict(_metrics.x_test)
     test_r2 = r2_score(_metrics.y_test, y_pred)
     test_mae = mean_absolute_error(_metrics.y_test, y_pred)
@@ -87,7 +97,7 @@ def main():
         )
 
         # Evaluate
-        metrics(MetricsModel(x_test=X_test_transformed, model=model, y_test=y_test, mlflow=mlflow))
+        metrics(MetricsInput(x_test=X_test_transformed, model=model, y_test=y_test, mlflow=mlflow))
 
 
 if __name__ == "__main__":

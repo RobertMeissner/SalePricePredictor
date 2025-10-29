@@ -30,27 +30,27 @@ test:
 ## Run preprocessing pipeline
 .PHONY: preprocess
 preprocess:
-	uv run -m src.main preprocess
+	uv run -m src.cli preprocess
 
 ## Train default model
 .PHONY: train
 train:
-	uv run -m src.main train
+	uv run -m src.cli train
 
 ## Run experiment with default config
 .PHONY: experiment
 experiment:
-	uv run -m src.main experiment
+	uv run -m src.cli experiment
 
 ## Run experiment with custom config (usage: make experiment-config CONFIG=myconfig)
 .PHONY: experiment-config
 experiment-config:
-	uv run -m src.main experiment --config-name $(CONFIG)
+	uv run -m src.cli experiment --config-name $(CONFIG)
 
 ## Run experiment with custom name (usage: make experiment-custom NAME=my-experiment)
 .PHONY: experiment-custom
 experiment-custom:
-	uv run -m src.main experiment --experiment-name $(NAME)
+	uv run -m src.cli experiment --experiment-name $(NAME)
 
 .DEFAULT_GOAL := help
 
@@ -65,3 +65,7 @@ mlflow:
 .PHONY: dashboard
 dashboard:
 	uv run streamlit run src/presentation/streamlit_app.py
+
+.PHONY: progression
+progression:
+	uv run src/presentation/progression.py

@@ -3,11 +3,11 @@ from hydra import compose, initialize
 from loguru import logger
 import typer
 
-from src.adapters.experiment_manager import ExperimentManager
-from src.config import CONFIG_DIR
+from src.config.paths import CONFIG_DIR
 from src.domain.models.experiment_models import ExperimentSetup, MetricsOutput
 from src.domain.ports.experiment_manager_port import ExperimentManagerPort
 from src.preprocessing.preprocess import run_preprocessing
+from src.services.experiment_manager import ExperimentManager
 
 app = typer.Typer()
 

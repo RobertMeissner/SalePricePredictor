@@ -2,7 +2,7 @@ import mlflow
 import pandas as pd
 import plotly.express as px
 
-from utils.mlflow_setup import setup_mlflow
+from src.utils.mlflow_setup import setup_mlflow
 
 setup_mlflow()
 client = mlflow.tracking.MlflowClient()

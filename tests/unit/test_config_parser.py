@@ -4,7 +4,7 @@ from pathlib import Path
 
 from omegaconf import DictConfig
 
-from src.config_parser import load_config
+from src.config.hydra_loader import load_config
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 

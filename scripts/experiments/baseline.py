@@ -13,10 +13,10 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
-from config import CONFIG_DIR
 from src.adapters.factory import create_data_repository
+from src.config import CONFIG_DIR
 from src.config_parser import load_config
-from utils.mlflow_setup import setup_mlflow
+from src.utils.mlflow_setup import setup_mlflow
 
 setup_mlflow()
 mlflow.set_experiment("house-pricing")

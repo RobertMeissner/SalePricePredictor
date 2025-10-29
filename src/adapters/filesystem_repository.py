@@ -6,7 +6,7 @@ from omegaconf import DictConfig
 import pandas as pd
 import polars as pl
 
-from src.config import PROJECT_ROOT
+from src.config.paths import PROJECT_ROOT
 
 
 class FileSystemDataRepository:

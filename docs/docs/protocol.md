@@ -176,5 +176,12 @@ future proofing enabled by
 
 Use yaml-style config for experiments
 
+Refactoring
+- hexagonal architecture
+- abstracted data reading and handling
+- abstracted experiments
+- yaml config as single entrypoint for experiments
+
+
 next: feature engineering
 - mixture of categorical and numerical

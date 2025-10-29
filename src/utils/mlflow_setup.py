@@ -1,6 +1,6 @@
 import mlflow
 
-from src.config import MLFLOW_TRACKING_URI
+from src.config.paths import MLFLOW_TRACKING_URI
 
 
 def setup_mlflow():
