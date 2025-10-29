@@ -1,0 +1,12 @@
+# Experiment configuration template
+# This file combines all experiment aspects
+
+# Inherits preprocessing, model, training from defaults in config.yaml
+# Can be overridden by creating new files in respective directories
+
+# Experiment metadata for MLflow tracking
+name: house-pricing
+run_name: null  # Auto-generated from timestamp if null
+tags:
+  feature_set: baseline
+  description: "YAML-driven experiment with standard preprocessing"

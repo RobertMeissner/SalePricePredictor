@@ -23,8 +23,7 @@ FIGURES_DIR = REPORTS_DIR / "figures"
 
 MLFLOW_TRACKING_URI = PROJECT_ROOT / "mlruns"
 
-# Hydra config path MUST be relative
-CONFIG_DIR = "../config"
+CONFIG_DIR = PROJECT_ROOT / "config"
 
 # Files
 

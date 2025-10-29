@@ -1,12 +1,19 @@
-# Main configuration file for preprocessing
+# Main configuration file
 
 defaults:
   - preprocessing: default
+  - model: linear
+  - training: default
+  - experiment: experiment
   - _self_
 
 data:
   raw_path: data/raw/raw.csv
   interim_path: data/interim/interim.parquet
   metadata_path: data/interim/interim_metadata.json
+
+experiment:
+  name: house-pricing
+  run_name: null  # Auto-generated if null
 
 save: true
