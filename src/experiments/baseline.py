@@ -1,3 +1,10 @@
+"""
+Baseline Experiment
+
+Simple baseline model using LinearRegression on numerical features only.
+This experiment uses dependency injection for data access.
+"""
+
 import datetime
 
 import mlflow
@@ -6,13 +13,20 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
-from src.adapters.load import raw
+from config import CONFIG_DIR
+from src.adapters.factory import create_data_repository
+from src.config_parser import load_config
 from utils.mlflow_setup import setup_mlflow
 
 setup_mlflow()
 mlflow.set_experiment("house-pricing")
 
-df = raw()
+# Load configuration and create repository
+config = load_config(CONFIG_DIR, "config")
+data_repository = create_data_repository(config)
+
+# Load data through repository
+df = data_repository.load_raw()
 
 numerical_cols = df.select_dtypes(include=[np.number]).columns.tolist()
 numerical_cols.remove("SalePrice")

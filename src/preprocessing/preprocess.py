@@ -2,39 +2,47 @@ from loguru import logger
 from omegaconf import DictConfig
 import pandas as pd
 
-from src.adapters.command import write_interim, write_interim_metadata
-from src.adapters.load import raw
-from src.preprocessing.sklearn_pipeline_builder import pipeline_from_config
+from src.domain.ports.data_repository import DataRepository
+from src.preprocessing.sklearn_pipeline_builder import build_pipeline
 
 
-def run_preprocessing(config: DictConfig, save: bool = True) -> pd.DataFrame:
+def run_preprocessing(
+    config: DictConfig, data_repository: DataRepository, save: bool = True
+) -> pd.DataFrame:
     """
-    Run the complete preprocessing pipeline using the new pipeline architecture.
+    Run the complete preprocessing pipeline using dependency injection.
 
     Args:
-        save: Whether to save the preprocessed data and metadata
         config: Hydra configuration (DictConfig)
+        data_repository: Data repository adapter implementing DataRepository port
+        save: Whether to save the preprocessed data and metadata (default: True)
 
     Returns:
-        Tuple of (preprocessed_df, metadata_dict)
+        pd.DataFrame: Preprocessed dataframe
 
     Example:
-        # Use pipeline
-        df, metadata = run_preprocessing("default")
-
-
+        >>> from src.adapters.factory import create_data_repository
+        >>> from src.config_parser import load_config
+        >>> from config import CONFIG_DIR
+        >>>
+        >>> config = load_config(CONFIG_DIR, "config")
+        >>> repository = create_data_repository(config)
+        >>> df = run_preprocessing(config, repository, save=True)
     """
-    df = raw()
+    # Load data through injected repository
+    df = data_repository.load_raw()
     logger.debug(f"Loaded {len(df)} rows, {len(df.columns)} columns")
 
     # Build pipeline from Hydra config
-    pipeline = pipeline_from_config(config)
-    logger.debug(f"Using pipeline config: '{config}'")
+    pipeline = build_pipeline(config)
+    logger.debug(f"Using pipeline config from: '{config}'")
 
+    # Transform data
     df_preprocessed = pipeline.fit_transform(df)
+
+    # Save through repository if requested
     if save:
-        write_interim(df_preprocessed)
-        write_interim_metadata(pipeline.metadata)
+        data_repository.save_interim(df_preprocessed, pipeline.metadata)
         logger.success(f"Preprocessing complete! Output shape: {df_preprocessed.shape}")
 
     return df_preprocessed

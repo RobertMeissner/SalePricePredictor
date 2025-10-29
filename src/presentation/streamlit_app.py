@@ -1,43 +1,63 @@
+"""
+Streamlit Dashboard for House Sale Price Analysis
+
+Uses dependency injection via data repository for hexagonal architecture.
+"""
+
 import plotly.express as px
 import polars as pl
 import streamlit as st
 
-from src.config import INTERIM_DATA_DIR, INTERIM_DATA_FILENAME, RAW_DATA, RAW_DATA_DIR
+from config import CONFIG_DIR
+from src.adapters.factory import create_data_repository
+from src.config_parser import load_config
 
 # Page configuration
 st.set_page_config(page_title="House Sale Price Analysis", page_icon="🏠", layout="wide")
 
-# Constants
-want_raw = False  # TODO: Make selectable in UI
-if want_raw:
-    DATA_PATH = RAW_DATA_DIR / RAW_DATA
-else:
-    DATA_PATH = INTERIM_DATA_DIR / INTERIM_DATA_FILENAME
+
+@st.cache_resource
+def get_data_repository():
+    """Create and cache data repository instance."""
+    config = load_config(CONFIG_DIR, "config")
+    return create_data_repository(config)
 
 
 @st.cache_data
-def load_data():
-    """Load the raw dataset."""
-    # TODO: Refactor to use pandas
-    if want_raw:
-        df = pl.read_csv(
-            DATA_PATH, try_parse_dates=True, infer_schema_length=10000, null_values="NA"
-        )
+def load_data(use_raw: bool = False):
+    """
+    Load dataset through data repository adapter.
+
+    Args:
+        use_raw: If True, load raw data; if False, load interim data
+
+    Returns:
+        Polars DataFrame
+    """
+    repository = get_data_repository()
+
+    if use_raw:
+        df_pandas = repository.load_raw()
     else:
-        df = pl.read_parquet(DATA_PATH)
-    return df
+        df_pandas = repository.load_interim()
+
+    # Convert to Polars for compatibility with existing dashboard code
+    return pl.from_pandas(df_pandas)
 
 
 def main():
     st.title("🏠 House Sale Price Analysis")
     st.markdown("Explore how SalePrice relates to various features in the dataset")
 
-    # Load data
-    with st.spinner("Loading data..."):
-        df = load_data()
-
     # Sidebar
     st.sidebar.header("Configuration")
+
+    # Data source selection
+    use_raw = st.sidebar.checkbox("Use Raw Data (instead of Interim)", value=False)
+
+    # Load data
+    with st.spinner("Loading data..."):
+        df = load_data(use_raw=use_raw)
 
     # Get numerical and categorical columns (excluding SalePrice and Id)
     numerical_cols = [

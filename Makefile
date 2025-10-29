@@ -37,6 +37,21 @@ preprocess:
 train:
 	uv run -m src.main train
 
+## Run experiment with default config
+.PHONY: experiment
+experiment:
+	uv run -m src.main experiment
+
+## Run experiment with custom config (usage: make experiment-config CONFIG=myconfig)
+.PHONY: experiment-config
+experiment-config:
+	uv run -m src.main experiment --config-name $(CONFIG)
+
+## Run experiment with custom name (usage: make experiment-custom NAME=my-experiment)
+.PHONY: experiment-custom
+experiment-custom:
+	uv run -m src.main experiment --experiment-name $(NAME)
+
 .DEFAULT_GOAL := help
 
 .PHONY: docs
@@ -47,5 +62,6 @@ docs:
 mlflow:
 	uv run mlflow ui
 
+.PHONY: dashboard
 dashboard:
 	uv run streamlit run src/presentation/streamlit_app.py

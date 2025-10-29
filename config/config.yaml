@@ -7,6 +7,7 @@ run_name: "iterative_preprocessing"
 name: "house-pricing"
 
 data:
+  repository_type: filesystem
   raw_path: data/raw/raw.csv
   interim_path: data/interim/interim.parquet
   metadata_path: data/interim/interim_metadata.json

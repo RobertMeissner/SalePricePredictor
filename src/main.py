@@ -1,10 +1,12 @@
 from dotenv import load_dotenv
-import hydra
 from hydra import compose, initialize
 from loguru import logger
 import typer
 
-from config import CONFIG_DIR
+from src.adapters.experiment_manager import ExperimentManager
+from src.config import CONFIG_DIR
+from src.domain.models.experiment_models import ExperimentSetup, MetricsOutput
+from src.domain.ports.experiment_manager_port import ExperimentManagerPort
 from src.preprocessing.preprocess import run_preprocessing
 
 app = typer.Typer()
@@ -45,13 +47,41 @@ def feature(config: str = "default") -> None:
 
 
 @app.command("experiment")
-@hydra.main(version_base="1.3")
-def experiment(name: str = "experiment") -> None:
-    # TODO: Repository pattern, depends for data
-    #   wrap MLFlow stuff (?)
-    #   execute pipeline non-blocking?
-    # TODO: Add more data to experiment yaml, cover more data
-    pass
+def experiment(
+    config_name: str = typer.Option("config", help="Config file name (without .yaml)"),
+    run_name: str = typer.Option(None, help="Override run name"),
+) -> None:
+    """
+    Run a complete ML experiment with Hydra configuration.
+
+    Executes the full experiment workflow with dependency injection:
+    - Loads data through configured repository adapter
+    - Applies preprocessing pipeline from config
+    - Trains model with configured parameters
+    - Evaluates and logs metrics to MLflow
+
+    Examples:
+        uv run -m src.main experiment
+        uv run -m src.main experiment --config-name config
+        uv run -m src.main experiment --experiment-name my-experiment
+        uv run -m src.main experiment --run-name ridge-test
+    """
+    manager: ExperimentManagerPort = ExperimentManager()
+
+    manager.setup_experiment(ExperimentSetup(config_name=config_name, run_name=run_name))
+
+    result = manager.run()
+
+    # display last experiment
+    # fixme: add return? How to better display metrics?
+    (metrics_dict,) = result.values()
+    metrics = MetricsOutput(**metrics_dict)
+
+    # Display results
+    typer.echo("\nMetrics:")
+    typer.echo(f"  R² Score: {metrics.r2:.4f}")
+    typer.echo(f"  MAE:      ${metrics.mae:.2f}")
+    typer.echo(f"  MSE:      {metrics.mse:.2f}")
 
 
 if __name__ == "__main__":
