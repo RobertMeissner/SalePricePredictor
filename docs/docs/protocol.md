@@ -171,3 +171,10 @@ future proofing enabled by
   - dev's use this class and expect similar interface to sklearn.pipeline. Adding logging, monitoring etc. is hidden
 - happy path mostly
   - I currently not handle errors -> see what works for now and harden around that
+
+### 20251029
+
+Use yaml-style config for experiments
+
+next: feature engineering
+- mixture of categorical and numerical

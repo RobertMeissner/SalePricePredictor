@@ -1,28 +1,30 @@
-from pathlib import Path
-
 import plotly.express as px
-import plotly.graph_objects as go
 import polars as pl
 import streamlit as st
 
-from src.config import RAW_DATA_DIR, RAW_DATA_FILENAME
+from src.config import INTERIM_DATA_DIR, INTERIM_DATA_FILENAME, RAW_DATA, RAW_DATA_DIR
 
 # Page configuration
-st.set_page_config(
-    page_title="House Sale Price Analysis", page_icon="🏠", layout="wide"
-)
+st.set_page_config(page_title="House Sale Price Analysis", page_icon="🏠", layout="wide")
 
 # Constants
-
-DATA_PATH = RAW_DATA_DIR / RAW_DATA_FILENAME
+want_raw = False  # TODO: Make selectable in UI
+if want_raw:
+    DATA_PATH = RAW_DATA_DIR / RAW_DATA
+else:
+    DATA_PATH = INTERIM_DATA_DIR / INTERIM_DATA_FILENAME
 
 
 @st.cache_data
 def load_data():
     """Load the raw dataset."""
-    df = pl.read_csv(
-        DATA_PATH, try_parse_dates=True, infer_schema_length=10000, null_values="NA"
-    )
+    # TODO: Refactor to use pandas
+    if want_raw:
+        df = pl.read_csv(
+            DATA_PATH, try_parse_dates=True, infer_schema_length=10000, null_values="NA"
+        )
+    else:
+        df = pl.read_parquet(DATA_PATH)
     return df
 
 
@@ -44,9 +46,7 @@ def main():
         if col not in ["SalePrice", "Id"]
     ]
     categorical_cols = [
-        col
-        for col in df.columns
-        if df[col].dtype in [pl.Utf8, pl.Categorical] and col != "Id"
+        col for col in df.columns if df[col].dtype in [pl.Utf8, pl.Categorical] and col != "Id"
     ]
 
     # Overview Section
@@ -77,7 +77,7 @@ def main():
             labels={"SalePrice": "Sale Price ($)"},
         )
         fig_hist.update_layout(showlegend=False)
-        st.plotly_chart(fig_hist, use_container_width=True)
+        st.plotly_chart(fig_hist, width="stretch")
 
     with col2:
         fig_box = px.box(
@@ -86,7 +86,7 @@ def main():
             title="Sale Price Box Plot",
             labels={"SalePrice": "Sale Price ($)"},
         )
-        st.plotly_chart(fig_box, use_container_width=True)
+        st.plotly_chart(fig_box, width="stretch")
 
     # Display basic statistics
     with st.expander("📈 Sale Price Statistics"):
@@ -101,7 +101,7 @@ def main():
                 pl.col("SalePrice").quantile(0.75).alias("Q3"),
             ]
         )
-        st.dataframe(stats.to_pandas().T, use_container_width=True)
+        st.dataframe(stats.to_pandas().T, width="stretch")
 
     # Numerical Features Analysis
     st.header("🔢 Sale Price vs Numerical Features")
@@ -110,9 +110,7 @@ def main():
     df_pandas = df.to_pandas()
     numeric_df = df_pandas.select_dtypes(include=["int64", "float64"])
     correlations = numeric_df.corr()["SalePrice"].sort_values(ascending=False)
-    top_features = correlations[
-        1:11
-    ].index.tolist()  # Top 10 excluding SalePrice itself
+    top_features = correlations[1:11].index.tolist()  # Top 10 excluding SalePrice itself
 
     # Feature selection
     selected_numerical = st.sidebar.multiselect(
@@ -124,7 +122,6 @@ def main():
     if selected_numerical:
         # Create scatter plots
         num_cols = 2
-        num_rows = (len(selected_numerical) + 1) // 2
 
         for i in range(0, len(selected_numerical), num_cols):
             cols = st.columns(num_cols)
@@ -144,7 +141,7 @@ def main():
                             opacity=0.6,
                             trendline="ols",
                         )
-                        st.plotly_chart(fig, use_container_width=True)
+                        st.plotly_chart(fig, width="stretch")
 
     # Correlation Heatmap
     st.header("🔥 Correlation Heatmap")
@@ -170,7 +167,7 @@ def main():
             title=f"Top {n_features} Features Correlation with SalePrice",
         )
         fig_heatmap.update_layout(height=600)
-        st.plotly_chart(fig_heatmap, use_container_width=True)
+        st.plotly_chart(fig_heatmap, width="stretch")
 
     # Top Correlations Table
     with st.expander("📊 Top Correlations with SalePrice"):
@@ -178,7 +175,7 @@ def main():
         top_corr_df.columns = ["Feature", "Correlation"]
         top_corr_df["Abs Correlation"] = top_corr_df["Correlation"].abs()
         top_corr_df = top_corr_df.sort_values("Abs Correlation", ascending=False)
-        st.dataframe(top_corr_df[["Feature", "Correlation"]], use_container_width=True)
+        st.dataframe(top_corr_df[["Feature", "Correlation"]], width="stretch")
 
     # Categorical Features Analysis
     st.header("📋 Sale Price vs Categorical Features")
@@ -186,9 +183,7 @@ def main():
     selected_categorical = st.sidebar.multiselect(
         "Select Categorical Features to Compare",
         options=categorical_cols,
-        default=categorical_cols[:3]
-        if len(categorical_cols) >= 3
-        else categorical_cols,
+        default=categorical_cols[:3] if len(categorical_cols) >= 3 else categorical_cols,
     )
 
     if selected_categorical:
@@ -216,20 +211,20 @@ def main():
                     labels={feature: feature, "SalePrice": "Sale Price ($)"},
                 )
                 fig.update_xaxes(tickangle=45)
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width="stretch")
 
             with col2:
                 st.markdown(f"**Average Price by {feature}**")
                 st.dataframe(
                     avg_price.to_pandas().head(10),
-                    use_container_width=True,
+                    width="stretch",
                     hide_index=True,
                 )
 
     # Raw Data Viewer
     st.header("🔍 Raw Data")
     if st.checkbox("Show raw data"):
-        st.dataframe(df.to_pandas(), use_container_width=True)
+        st.dataframe(df.to_pandas(), width="stretch")
         st.markdown(f"**Shape:** {df.shape[0]} rows × {df.shape[1]} columns")
 
 

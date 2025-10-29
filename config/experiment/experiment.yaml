@@ -1,12 +1,75 @@
-# Experiment configuration template
-# This file combines all experiment aspects
+ # @package _global_
 
-# Inherits preprocessing, model, training from defaults in config.yaml
-# Can be overridden by creating new files in respective directories
+preprocessing:
+  drop_columns: # too little data
+    - PoolQC
+    - MiscFeature
+    - Alley
+    - Fence
+    - FireplaceQu
+    - LotFrontage
+    - MasVnrType
 
-# Experiment metadata for MLflow tracking
-name: house-pricing
-run_name: null  # Auto-generated from timestamp if null
-tags:
-  feature_set: baseline
-  description: "YAML-driven experiment with standard preprocessing"
+  remove_outliers:
+    GrLivArea:
+      greaterthan: 4000
+
+  categorical_transforms:
+    FireplaceQu:
+      type: binary
+      description: "Fireplace quality: Good (Ex/TA/Gd) → 1, Bad/None → 0"
+      mapping:
+        Ex: 1
+        TA: 1
+        Gd: 1
+        Fa: 0
+        Po: 0
+        "None": 0
+      null_value: 0
+
+  imputation:
+    numerical_strategy: median
+    categorical_strategy: mode
+    exclude_columns: &exclude_columns
+      - Id
+      - SalePrice
+
+  scaling:
+    strategy: standard
+    exclude_columns: *exclude_columns
+
+  # Pipeline step definition
+  # --------------------
+
+  pipeline:
+    - step: drop_columns
+      name: drop_columns
+
+    - step: remove_outliers
+      name: remove_outliers
+
+    - step: categorical_transforms
+      name: categorical_transforms
+
+    - step: imputation
+      name: imputation
+
+    - step: scaling
+      name: scaling
+
+model:
+  params:
+    fit_intercept: true
+  regression_model: "linear"
+  features:
+    - GrLivArea
+
+
+training:
+  test_size: 0.2
+  random_state: 37
+  target_column: SalePrice
+  metrics:
+    - r2_score
+    - mean_absolute_error
+    - mean_squared_error

@@ -90,6 +90,10 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# Automated EDA reports
+*_sweetviz_report.html
+*_ydata_report.html
+
 # IPython
 profile_default/
 ipython_config.py

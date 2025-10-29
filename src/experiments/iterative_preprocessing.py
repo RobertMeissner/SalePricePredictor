@@ -1,12 +1,9 @@
-"""Config-driven experiment using experiment.yaml."""
-
-from pathlib import Path
-
 import mlflow
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Lasso, LinearRegression, Ridge
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
+from config import CONFIG_DIR
 from src.adapters.load import raw
 from src.config_parser import load_config
 from src.preprocessing.sklearn_pipeline_builder import build_pipeline
@@ -17,8 +14,8 @@ setup_mlflow()
 mlflow.set_experiment("house-pricing")
 
 # Load config
-config_dir = Path(__file__).resolve().parents[2] / "tests" / "config"
-cfg = load_config(config_dir, "experiment")
+config_dir = CONFIG_DIR
+cfg = load_config(config_dir, "config")
 
 # Load data
 df = raw()
@@ -34,11 +31,10 @@ X_train, X_test, y_train, y_test = train_test_split(
 # Build preprocessing pipeline from config
 pipeline = build_pipeline(cfg)
 
-with mlflow.start_run(run_name="iterative_preprocessing"):
+with mlflow.start_run(run_name=cfg.run_name):
     # Log config params
     mlflow.log_param("test_size", cfg.training.test_size)
     mlflow.log_param("random_state", cfg.training.random_state)
-    mlflow.log_param("model", "LinearRegression")
 
     # Fit pipeline and transform data
     X_train_transformed = pipeline.fit_transform(X_train)
@@ -52,7 +48,17 @@ with mlflow.start_run(run_name="iterative_preprocessing"):
     mlflow.log_param("n_features_after_transform", X_train_transformed.shape[1])
 
     # Train model with params from config
-    model = LinearRegression(**cfg.model.params)
+    match cfg.model.regression_model:
+        case "linear":
+            model = LinearRegression(**cfg.model.params)
+        case "ridge":
+            model = Ridge(**cfg.model.params)
+        case "lasso":
+            model = Lasso(**cfg.model.params)
+        case default:
+            model = LinearRegression(**cfg.model.params)
+
+    mlflow.log_param("model", model.__class__.__name__)
     model.fit(X_train_transformed, y_train)
 
     # Log model with signature

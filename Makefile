@@ -46,3 +46,6 @@ docs:
 .PHONY: mlflow
 mlflow:
 	uv run mlflow ui
+
+dashboard:
+	uv run streamlit run src/presentation/streamlit_app.py
