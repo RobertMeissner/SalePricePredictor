@@ -72,7 +72,11 @@ experiment-custom:
 
 .PHONY: docs
 docs:
-	cd docs && uv run mkdocs build && uv run mkdocs serve
+	uv run mkdocs build
+
+.PHONY: presentation
+presentation:
+	uv run mkdocs serve
 
 .PHONY: mlflow
 mlflow:

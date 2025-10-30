@@ -187,8 +187,28 @@ Tracked metrics include:
 
 Full documentation is available:
 
-- **Local**: Run `make docs` and visit http://localhost:8000
+- **Local**: Run `make presentation` to launch the interactive presentation
 - **Online**: Visit [project documentation](https://robertmeissner.github.io/SalePricePredictor/)
+
+### Tech Interview Presentation
+
+A structured 15-minute presentation is available for tech interviews:
+
+```bash
+# Launch the presentation
+make presentation
+# Opens http://localhost:8000
+```
+
+The presentation covers:
+
+1. **Problem & Motivation** (2 min) - What problem we're solving and why
+2. **Solution & Architecture** (3 min) - Hexagonal architecture, YAML configuration, tech stack
+3. **Live Demo** (5 min) - Running experiments, MLflow tracking, Streamlit dashboard
+4. **Results & Learnings** (3 min) - Model performance, engineering insights, trade-offs
+5. **Q&A Preparation** (2 min) - Common technical questions and answers
+
+Navigate through the presentation using the tabs and sidebar navigation in the browser.
 
 ## Contributing
 

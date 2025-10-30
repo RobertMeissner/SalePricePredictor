@@ -1,0 +1,63 @@
+site_name: SalePricePredictor - Tech Interview Presentation
+site_description: ML System for House Price Prediction - Interview Presentation
+site_author: Robert Meißner
+
+theme:
+  name: material
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+  - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+nav:
+  - Home: index.md
+  - Presentation:
+    - 1. Problem & Motivation: presentation/01-problem.md
+    - 2. Solution & Architecture: presentation/02-solution.md
+    - 3. Live Demo: presentation/03-demo.md
+    - 4. Results & Learnings: presentation/04-results.md
+    - 5. Q&A Notes: presentation/05-qa.md
+  - Technical Details:
+    - Protocol & Design: protocol.md
+
+docs_dir: docs/docs
