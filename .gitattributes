@@ -1,0 +1,9 @@
+*.ipynb linguist-language=Python
+
+# Better diffs for specific file types
+*.ipynb diff=jupyternotebook
+*.json diff=json
+*.csv diff=csv
+
+# Don't show diffs for certain files
+*.lock -diff
