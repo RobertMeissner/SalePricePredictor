@@ -24,6 +24,22 @@ def run_preprocessing(
     df = data_repository.load_raw()
     logger.debug(f"Loaded {len(df)} rows, {len(df.columns)} columns")
 
+    # Apply outlier removal BEFORE pipeline (to keep X and y aligned if used with train_test_split)
+    if hasattr(config.preprocessing, "remove_outliers") and config.preprocessing.remove_outliers:
+        for column, conditions in config.preprocessing.remove_outliers.items():
+            if column not in df.columns:
+                continue
+
+            # Apply greaterthan condition
+            if "greaterthan" in conditions:
+                df = df[df[column] <= conditions["greaterthan"]]
+
+            # Apply lessthan condition
+            if "lessthan" in conditions:
+                df = df[df[column] >= conditions["lessthan"]]
+
+        logger.debug(f"After outlier removal: {len(df)} rows remaining")
+
     # Build pipeline from Hydra config
     pipeline = build_pipeline(config)
     logger.debug(f"Using pipeline config from: '{config}'")

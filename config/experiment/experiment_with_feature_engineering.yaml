@@ -1,0 +1,117 @@
+# @package _global_
+
+preprocessing:
+  drop_columns: # too little data
+    - PoolQC
+    - MiscFeature
+    - Alley
+    - Fence
+    - FireplaceQu
+    - LotFrontage
+    - MasVnrType
+
+  remove_outliers:
+    GrLivArea:
+      greaterthan: 4000
+
+  categorical_transforms: # Just for show, this column is dropped
+    FireplaceQu:
+      type: binary
+      description: "Fireplace quality: Good (Ex/TA/Gd) → 1, Bad/None → 0"
+      mapping:
+        Ex: 1
+        TA: 1
+        Gd: 1
+        Fa: 0
+        Po: 0
+        "None": 0
+      null_value: 0
+
+  imputation:
+    numerical_strategy: median
+    categorical_strategy: mode
+    exclude_columns: &exclude_columns
+      - Id
+      - SalePrice
+
+  feature_engineering:
+    polynomial_features:
+      - column: OverallQual
+        degrees: [2, 3]
+      - column: GrLivArea
+        degrees: [2]
+      - column: YearBuilt
+        degrees: [2]
+
+    binary_indicators:
+      - name: HasBsmt
+        condition:
+          column: TotalBsmtSF
+          operator: ">"
+          value: 0
+      - name: HasGarage
+        condition:
+          column: GarageArea
+          operator: ">"
+          value: 0
+
+    log_transforms: # reduce skewness
+      - SalePrice
+      - GrLivArea
+      - LotArea
+
+    interactions:
+      - columns: [OverallQual, GrLivArea]
+        name: Qual_x_Area
+      - columns: [OverallQual, YearBuilt]
+        name: Qual_x_Year
+
+  feature_selection:
+    method: correlation
+    params:
+      threshold: 0.3
+    target_column: SalePrice
+    exclude_columns: *exclude_columns  # Always keep these columns
+
+  scaling:
+    strategy: standard
+    exclude_columns: *exclude_columns
+
+  pipeline:
+    - step: drop_columns
+      name: drop_columns
+
+    - step: remove_outliers
+      name: remove_outliers
+
+    - step: categorical_transforms
+      name: categorical_transforms
+
+    - step: imputation
+      name: imputation
+
+    - step: feature_engineering
+      name: feature_engineering
+
+    - step: feature_selection
+      name: feature_selection
+
+    - step: scaling
+      name: scaling
+
+model:
+  params:
+    fit_intercept: true
+  regression_model: "linear"
+  features:
+    - GrLivArea
+    - OverallQual
+
+training:
+  test_size: 0.2
+  random_state: 37
+  target_column: SalePrice
+  metrics:
+    - r2_score
+    - mean_absolute_error
+    - mean_squared_error

@@ -40,6 +40,27 @@ class SimpleExperiment:
 
     def _run_experiment(self) -> dict:
         df = self._data_repository.load_raw()
+
+        # Apply outlier removal BEFORE train_test_split
+        # This ensures X and y stay aligned
+        if (
+            hasattr(self.config.preprocessing, "remove_outliers")
+            and self.config.preprocessing.remove_outliers
+        ):
+            for column, conditions in self.config.preprocessing.remove_outliers.items():
+                if column not in df.columns:
+                    continue
+
+                # Apply greaterthan condition
+                if "greaterthan" in conditions:
+                    df = df[df[column] <= conditions["greaterthan"]]
+
+                # Apply lessthan condition
+                if "lessthan" in conditions:
+                    df = df[df[column] >= conditions["lessthan"]]
+
+            logger.debug(f"After outlier removal: {len(df)} rows remaining")
+
         X = df.drop(columns=[self.config.training.target_column])
         y = df[self.config.training.target_column]
 

@@ -1,6 +1,6 @@
 # Main configuration file
 defaults:
-  - experiment: experiment
+  - experiment: experiment_with_feature_engineering
   - _self_
 save: true
 run_name: "iterative_preprocessing"
