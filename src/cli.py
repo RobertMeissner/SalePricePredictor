@@ -1,31 +1,13 @@
 from dotenv import load_dotenv
-from hydra import compose, initialize
-from loguru import logger
 import typer
 
-from src.config.paths import CONFIG_DIR
 from src.domain.models.experiment_models import ExperimentSetup, MetricsOutput
 from src.domain.ports.experiment_manager_port import ExperimentManagerPort
-from src.preprocessing.preprocess import run_preprocessing
 from src.services.experiment_manager import ExperimentManager
 
 app = typer.Typer()
 
 load_dotenv()
-
-
-@app.command("preprocess")
-def preprocess(config: str = "default") -> None:
-    """
-    Run the preprocessing pipeline to transform raw data into intermediate dataset.
-
-    params: config: name of the configuration file.
-    """
-    with initialize(config_path=CONFIG_DIR, version_base=None):
-        config = compose(config_name=f"preprocessing/{config}")
-        df_preprocessed = run_preprocessing(config=config)
-        logger.debug(f"Output shape: {df_preprocessed.shape}")
-    typer.echo("Preprocessing done!", fg="green")
 
 
 @app.command("train")

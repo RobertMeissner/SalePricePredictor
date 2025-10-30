@@ -1,20 +1,12 @@
 # 1. Problem & Motivation
 
-**Duration: 2 minutes**
-
 ---
 
 ## The Challenge
 
-### Real-World Problem
-House price prediction is a **classic regression problem** with practical applications:
+House price prediction is a **classic regression problem**. Solutions are available on Kaggle.
 
-- **Buyers**: Avoid overpaying
-- **Sellers**: Price competitively
-- **Investors**: Identify undervalued properties
-- **Real estate agents**: Data-driven pricing strategies
-
-### The Dataset: Ames Housing
+The Dataset: Ames Housing
 
 - **Source**: Kaggle competition dataset (Ames, Iowa)
 - **Scale**: 1,460 houses with 79 explanatory variables
@@ -32,23 +24,12 @@ House price prediction is a **classic regression problem** with practical applic
 
 ### Goals Beyond Accuracy
 
-While ML competitions focus on leaderboard rankings, **real-world systems** need:
+- SOLID/CUPID
 
 1. **Reproducibility** - Experiments must be repeatable
 2. **Maintainability** - Code that's easy to understand and modify
 3. **Configurability** - Change models/features without code changes
 4. **Observability** - Track experiments and model performance
-5. **Testability** - Confidence in changes through automated tests
-
-### Demonstration of Skills
-
-This project showcases:
-
-- **Software Engineering**: Clean architecture, SOLID principles, design patterns
-- **ML Engineering**: Full pipeline from raw data to deployed model
-- **DevOps Practices**: Automated testing, linting, type checking
-- **Experiment Management**: MLflow for tracking and reproducibility
-- **Domain Knowledge**: Feature engineering for tabular data
 
 ---
 
@@ -71,11 +52,6 @@ This project showcases:
 - **R² Score**: How well the model explains price variance
 - **MAE (Mean Absolute Error)**: Average prediction error in dollars
 - **MSE (Mean Squared Error)**: Penalizes large errors more heavily
-
-### Engineering Metrics
-- **Test Coverage**: >70% (enforced)
-- **Type Safety**: 100% (mypy strict mode)
-- **Code Quality**: Automated linting (ruff)
 
 ---
 

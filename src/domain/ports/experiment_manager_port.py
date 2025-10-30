@@ -3,6 +3,7 @@ from typing import Protocol
 from src.domain.models.experiment_models import ExperimentSetup
 
 
+# Highlight to show
 class ExperimentManagerPort(Protocol):
     """
 

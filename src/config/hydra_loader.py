@@ -4,6 +4,7 @@ from hydra import compose, initialize_config_dir
 from omegaconf import DictConfig
 
 
+# Highlight to show
 def load_config(config_dir: Path, config_name: str = "config") -> DictConfig:
     """Load configuration using Hydra.
 

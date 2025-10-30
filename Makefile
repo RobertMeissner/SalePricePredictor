@@ -43,11 +43,6 @@ typecheck:
 security:
 	uv run bandit -c pyproject.toml -r src
 
-
-.PHONY: preprocess
-preprocess:
-	uv run -m src.cli preprocess
-
 ## Train default model
 .PHONY: train
 train:

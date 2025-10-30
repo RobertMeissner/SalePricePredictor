@@ -12,6 +12,7 @@ from src.preprocessing.sklearn_pipeline_builder import build_pipeline
 from src.utils.build_model import _build_model
 
 
+# Highlight to show
 class SimpleExperiment:
     """
 

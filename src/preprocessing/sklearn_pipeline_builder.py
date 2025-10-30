@@ -147,6 +147,7 @@ class ScalingTransformer(BaseEstimator, TransformerMixin):
         return X
 
 
+# Highlight to show
 def build_pipeline(config: DictConfig) -> Pipeline:
     """Build sklearn pipeline from config.
 

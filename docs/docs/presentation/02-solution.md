@@ -1,39 +1,6 @@
 # 2. Solution & Architecture
 
-**Duration: 3 minutes**
-
----
-
-## High-Level Architecture
-
 ### Hexagonal Architecture (Ports & Adapters)
-
-```
-┌─────────────────────────────────────────────────────┐
-│                  Presentation Layer                  │
-│           (CLI, Streamlit Dashboard)                 │
-└──────────────────┬──────────────────────────────────┘
-                   │
-┌──────────────────▼──────────────────────────────────┐
-│              Application Services                    │
-│        (ExperimentManager, SimpleExperiment)         │
-└──────────────────┬──────────────────────────────────┘
-                   │
-┌──────────────────▼──────────────────────────────────┐
-│                 Domain Layer                         │
-│     (Protocols/Interfaces, Business Logic)           │
-│   - Experiment Protocol                              │
-│   - DataRepository Protocol                          │
-│   - ExperimentManager Protocol                       │
-└──────────────────┬──────────────────────────────────┘
-                   │
-┌──────────────────▼──────────────────────────────────┐
-│              Infrastructure Layer                    │
-│   (FileSystemRepository, MLflow, sklearn)            │
-└─────────────────────────────────────────────────────┘
-```
-
-**Benefits**:
 
 - Core business logic independent of infrastructure
 - Easy to swap implementations (e.g., FileSystem → S3)
@@ -75,47 +42,13 @@ training:
   metrics: [r2_score, mean_absolute_error]
 ```
 
-**Single source of truth** - no hardcoded parameters!
+**Single source of truth**
+- cognitive focus of
+  - Data Scientists on YAML
+  - Engineers on plattform
+- configurable preprocessing Pipeline
 
 ---
-
-### 2. Preprocessing Pipeline
-
-**Modular Transformers** (scikit-learn compatible):
-
-1. **DropColumnsTransformer** - Remove low-data features
-2. **RemoveOutliersTransformer** - Handle outliers before split
-3. **CategoricalMapTransformer** - Binary/categorical encoding
-4. **ImputationTransformer** - Missing value handling
-5. **FeatureEngineeringTransformer** - Create new features:
-   - Polynomial features (OverallQual²)
-   - Binary indicators (HasBasement, HasGarage)
-   - Log transforms (for skewed distributions)
-   - Interactions (Quality × Area)
-6. **FeatureSelectionTransformer** - Filter by:
-   - Correlation threshold
-   - Variance threshold
-   - Mutual information
-7. **ScalingTransformer** - Standardization
-
-**All configured via YAML** - no code changes needed!
-
----
-
-### 3. Experiment Tracking (MLflow)
-
-**Automatic Logging**:
-
-- Parameters: model type, hyperparameters, config
-- Metrics: R², MAE, MSE
-- Artifacts: Trained model (pickled)
-- Tags: experiment name, timestamp
-
-**Web UI**: Browse all experiments at `http://localhost:5000`
-
----
-
-## Technology Choices
 
 ### Core Stack
 
@@ -133,9 +66,9 @@ training:
 | Tool | Purpose | Benefit |
 |------|---------|---------|
 | **pytest** | Testing | Comprehensive test discovery |
-| **mypy** | Type checking | Catch bugs before runtime |
 | **ruff** | Linting/formatting | Fast, all-in-one tool |
 | **pre-commit** | Git hooks | Enforce quality on every commit |
+| **mypy** | Type checking | Catch bugs before runtime |
 | **bandit** | Security scanning | Find security vulnerabilities |
 
 ---
@@ -177,8 +110,7 @@ class DataRepository(Protocol):
 ### 3. **Builder Pattern**
 
 ```python
-pipeline = SklearnPipelineBuilder(preprocessing_config)\
-    .build_pipeline()
+pipeline = SklearnPipelineBuilder(preprocessing_config).build_pipeline()
 ```
 
 **Benefit**: Complex pipeline construction from config
@@ -215,4 +147,5 @@ Results Display
 
 ---
 
-[Next: Live Demo →](03-demo.md)
+
+[Next: Results & Learnings →](03-results.md)

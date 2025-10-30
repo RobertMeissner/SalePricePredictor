@@ -1,5 +1,5 @@
-site_name: SalePricePredictor - Tech Interview Presentation
-site_description: ML System for House Price Prediction - Interview Presentation
+site_name: SalePricePredictor
+site_description: ML System for House Price Prediction
 site_author: Robert Meißner
 
 theme:
@@ -51,18 +51,10 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Audience-Specific (15 min):
-    - Guide & Overview: presentation/README.md
-    - For Senior Developer: presentation/FOR-SENIOR-DEV.md
-    - For ML Engineer: presentation/FOR-ML-ENGINEER.md
-    - For Product Owner: presentation/FOR-PRODUCT-OWNER.md
-    - Realistic Timing Analysis: presentation/REALISTIC-TIMING.md
-  - Original Presentation (25-30 min):
+  - Thoughts:
     - 1. Problem & Motivation: presentation/01-problem.md
     - 2. Solution & Architecture: presentation/02-solution.md
-    - 3. Live Demo: presentation/03-demo.md
-    - 4. Results & Learnings: presentation/04-results.md
-    - 5. Q&A Notes: presentation/05-qa.md
+    - 3. Results & Learnings: presentation/03-results.md
   - Technical Details:
     - Protocol & Design: protocol.md
 
