@@ -9,7 +9,7 @@ clean:
 	find . -type d -name "__pycache__" -delete
 
 .PHONY: check
-check: lint format
+check: lint format typecheck
 
 .PHONY: lint
 lint:
@@ -24,7 +24,25 @@ format:
 
 .PHONY: test
 test:
-	python -m pytest tests -v
+	uv run pytest tests -v
+
+.PHONY: test-cov
+test-cov:
+	uv run pytest tests -v --cov=src --cov-report=term-missing --cov-report=html
+
+.PHONY: coverage
+coverage:
+	uv run pytest tests --cov=src --cov-report=html
+	@echo "Coverage report generated in htmlcov/index.html"
+
+.PHONY: typecheck
+typecheck:
+	uv run mypy src
+
+.PHONY: security
+security:
+	uv run bandit -c pyproject.toml -r src
+	uv run safety check
 
 
 ## Run preprocessing pipeline

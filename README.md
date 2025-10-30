@@ -1,60 +1,289 @@
 # SalePricePredictor
 
+![Build Status](https://github.com/RobertMeissner/SalePricePredictor/workflows/CI/badge.svg)
+![Coverage](https://img.shields.io/codecov/c/github/RobertMeissner/SalePricePredictor)
+![Python Version](https://img.shields.io/badge/python-3.12-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Code Style](https://img.shields.io/badge/code%20style-ruff-000000.svg)
+
+A professional machine learning system for predicting house sale prices using scikit-learn, MLflow, and Hydra configuration management. Built with hexagonal architecture for maintainability and testability.
+
+## Key Features
+
+- **YAML-based Experiment Configuration**: Define entire ML experiments through simple YAML files with Hydra
+- **MLflow Integration**: Automatic experiment tracking and model versioning
+- **Hexagonal Architecture**: Clean separation between domain logic and infrastructure concerns
+- **Type Safety**: Full mypy type checking for production-ready code
+- **Comprehensive Testing**: >70% code coverage with pytest
+- **CI/CD Ready**: GitHub Actions workflows for testing and deployment
+- **Feature Engineering Pipeline**: Automated feature creation and selection
+- **Interactive Dashboard**: Streamlit interface for model exploration
+
+## Installation
+
+This project uses [uv](https://github.com/astral-sh/uv) for fast, reliable Python package management.
+
+```bash
+# Clone the repository
+git clone https://github.com/RobertMeissner/SalePricePredictor.git
+cd SalePricePredictor
+
+# Install dependencies
+uv sync
+
+# Install pre-commit hooks
+uv run pre-commit install
+```
+
+## Quick Start
+
+```bash
+# Run an experiment with default configuration
+make experiment
+
+# Run with a specific configuration
+uv run salepricepredictor experiment --config-name experiment_with_feature_engineering
+
+# Run with custom run name
+uv run salepricepredictor experiment --run-name my-test-run
+
+# Preprocess data
+make preprocess
+
+# View MLflow tracking UI
+make mlflow
+
+# Launch interactive dashboard
+make dashboard
+```
+
+## Usage
+
+### CLI Commands
+
+The project provides a CLI through `salepricepredictor`:
+
+```bash
+# Run experiments
+uv run salepricepredictor experiment [--config-name CONFIG] [--run-name NAME]
+
+# Preprocess data
+uv run salepricepredictor preprocess [--config CONFIG]
+
+# Train models (coming soon)
+uv run salepricepredictor train [--config CONFIG]
+```
+
+### Makefile Targets
+
+```bash
+make requirements      # Install dependencies
+make test              # Run tests
+make test-cov          # Run tests with coverage report
+make coverage          # Generate HTML coverage report
+make lint              # Check code formatting
+make format            # Auto-format code
+make typecheck         # Run mypy type checking
+make security          # Run security scans (bandit + safety)
+make check             # Run all checks (lint + format + typecheck)
+make experiment        # Run default experiment
+make mlflow            # Launch MLflow UI
+make dashboard         # Launch Streamlit dashboard
+make docs              # Build and serve documentation
+make clean             # Remove Python artifacts
+```
+
+## Configuration
+
+This project uses Hydra for hierarchical configuration management. Configurations are stored in `config/`:
+
+```
+config/
+├── config.yaml                          # Main config
+└── experiment/
+    ├── experiment.yaml                  # Basic experiment
+    └── experiment_with_feature_engineering.yaml  # With feature engineering
+```
+
+### Example Configuration
+
+```yaml
+# config/config.yaml
+defaults:
+  - experiment: experiment_with_feature_engineering
+  - _self_
+
+save: true
+run_name: "my_experiment"
+name: "house-pricing"
+
+data:
+  repository_type: filesystem
+  raw_path: data/raw/raw.csv
+  interim_path: data/interim/interim.parquet
+```
+
+You can override configurations from the command line:
+
+```bash
+uv run salepricepredictor experiment --config-name experiment run_name=test-run
+```
+
+## Architecture
+
+The project follows hexagonal (ports and adapters) architecture:
+
+```
+src/
+├── adapters/           # Infrastructure adapters (filesystem, etc.)
+├── domain/             # Core business logic
+│   ├── models/         # Domain models
+│   └── ports/          # Interface definitions
+├── preprocessing/      # Feature engineering and preprocessing
+├── services/           # Application services
+├── config/             # Configuration management
+├── presentation/       # UI components (CLI, Streamlit)
+└── utils/              # Utilities and helpers
+```
+
+## Development
+
+### Running Tests
+
+```bash
+# Run all tests
+make test
+
+# Run with coverage
+make test-cov
+
+# View coverage report
+make coverage
+# Open htmlcov/index.html in browser
+```
+
+### Code Quality
+
+```bash
+# Format code
+make format
+
+# Run linters
+make lint
+
+# Type checking
+make typecheck
+
+# Security scanning
+make security
+
+# Run all checks
+make check
+```
+
+### Pre-commit Hooks
+
+The project uses pre-commit hooks for code quality:
+
+- **ruff**: Fast Python linter and formatter
+- **isort**: Import sorting
+- **mypy**: Static type checking
+- **bandit**: Security vulnerability scanning
+- **codespell**: Spell checking
+
+```bash
+# Install hooks
+uv run pre-commit install
+
+# Run manually
+uv run pre-commit run --all-files
+```
+
+## Testing
+
+The project maintains >70% test coverage with comprehensive unit and integration tests:
+
+```
+tests/
+├── unit/
+│   ├── test_feature_engineering.py
+│   ├── test_feature_selection.py
+│   ├── test_sklearn_pipeline_builder.py
+│   └── test_config_parser.py
+└── integration/
+    └── test_feature_pipeline.py
+```
+
+## MLflow Tracking
+
+All experiments are automatically tracked in MLflow:
+
+```bash
+# Start MLflow UI
+make mlflow
+# Open http://localhost:5000
+```
+
+Tracked metrics include:
+- R² Score
+- Mean Absolute Error (MAE)
+- Mean Squared Error (MSE)
+- Feature importance
+- Model parameters
+
+## Project Structure
+
+```
+├── .github/            # GitHub Actions workflows
+├── config/             # Hydra configuration files
+├── data/
+│   ├── raw/            # Original immutable data
+│   ├── interim/        # Intermediate processed data
+│   └── processed/      # Final datasets for modeling
+├── docs/               # MkDocs documentation
+├── models/             # Trained models and predictions
+├── notebooks/          # Jupyter notebooks for exploration
+├── reports/            # Generated analysis and figures
+├── src/                # Source code
+├── tests/              # Test suite
+├── Makefile            # Convenience commands
+├── pyproject.toml      # Project dependencies and configuration
+└── README.md           # This file
+```
+
+## Documentation
+
+Full documentation is available:
+
+- **Local**: Run `make docs` and visit http://localhost:8000
+- **Online**: Visit [project documentation](https://robertmeissner.github.io/SalePricePredictor/) (after GitHub Pages setup)
+
+## Contributing
+
+1. Create a feature branch: `git checkout -b feature/my-feature`
+2. Make changes and ensure tests pass: `make test`
+3. Run code quality checks: `make check`
+4. Commit with clear message: `git commit -m "feat: add new feature"`
+5. Push and create pull request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Technologies
+
+- **Python 3.12**: Modern Python with latest features
+- **scikit-learn 1.7.2+**: Machine learning algorithms
+- **MLflow 3.4.0+**: Experiment tracking and model management
+- **Hydra 1.3.0+**: Configuration management
+- **pandas 2.3.3+**: Data manipulation
+- **pytest**: Testing framework
+- **ruff**: Fast Python linter and formatter
+- **mypy**: Static type checking
+- **uv**: Fast Python package manager
+
+---
+
 <a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
     <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
 </a>
-
-predict house sale prices
-
-## Project Organization
-
-```
-├── LICENSE            <- Open-source license if one is chosen
-├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
-├── README.md          <- The top-level README for developers using this project.
-├── data
-│   ├── external       <- Data from third party sources.
-│   ├── interim        <- Intermediate data that has been transformed.
-│   ├── processed      <- The final, canonical data sets for modeling.
-│   └── raw            <- The original, immutable data dump.
-│
-├── docs               <- A default mkdocs project; see www.mkdocs.org for details
-│
-├── models             <- Trained and serialized models, model predictions, or model summaries
-│
-├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-│                         the creator's initials, and a short `-` delimited description, e.g.
-│                         `1.0-jqp-initial-data-exploration`.
-│
-├── pyproject.toml     <- Project configuration file with package metadata for
-│                         src and configuration for tools like black
-│
-├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-│
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Generated graphics and figures to be used in reporting
-│
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
-│
-├── setup.cfg          <- Configuration file for flake8
-│
-└── src   <- Source code for use in this project.
-    │
-    ├── __init__.py             <- Makes src a Python module
-    │
-    ├── config.py               <- Store useful variables and configuration
-    │
-    ├── dataset.py              <- Scripts to download or generate data
-    │
-    ├── features.py             <- Code to create features for modeling
-    │
-    ├── modeling
-    │   ├── __init__.py
-    │   ├── predict.py          <- Code to run model inference with trained models
-    │   └── train.py            <- Code to train models
-    │
-    └── plots.py                <- Code to create visualizations
-```
-
---------
