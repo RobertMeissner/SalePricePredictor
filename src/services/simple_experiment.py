@@ -1,7 +1,6 @@
 from loguru import logger
 import mlflow
 from omegaconf import DictConfig
-from scripts.experiments.utils.model import _build_model
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
@@ -10,6 +9,7 @@ from src.config.hydra_loader import load_config
 from src.config.paths import CONFIG_DIR, MLFLOW_TRACKING_URI
 from src.domain.models.experiment_models import ExperimentSetup, MetricsOutput
 from src.preprocessing.sklearn_pipeline_builder import build_pipeline
+from src.utils.build_model import _build_model
 
 
 class SimpleExperiment:
