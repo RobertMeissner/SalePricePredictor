@@ -14,8 +14,8 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
 from src.adapters.factory import create_data_repository
-from src.config import CONFIG_DIR
-from src.config_parser import load_config
+from src.config.hydra_loader import load_config
+from src.config.paths import CONFIG_DIR
 from src.utils.mlflow_setup import setup_mlflow
 
 setup_mlflow()

@@ -110,9 +110,7 @@ class TestExperimentWorkflow:
         with pytest.raises(Exception):  # FileNotFoundError or similar
             repo.load_interim()
 
-    def test_multiple_save_load_cycles(
-        self, tmp_path: Path, sample_dataframe: pd.DataFrame
-    ):
+    def test_multiple_save_load_cycles(self, tmp_path: Path, sample_dataframe: pd.DataFrame):
         """Test multiple save/load cycles maintain data integrity."""
         config = OmegaConf.create(
             {

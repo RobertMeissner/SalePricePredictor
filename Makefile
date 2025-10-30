@@ -42,10 +42,8 @@ typecheck:
 .PHONY: security
 security:
 	uv run bandit -c pyproject.toml -r src
-	uv run safety check
 
 
-## Run preprocessing pipeline
 .PHONY: preprocess
 preprocess:
 	uv run -m src.cli preprocess

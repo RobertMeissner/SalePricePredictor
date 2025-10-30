@@ -2,8 +2,8 @@
 Shared test fixtures for SalePricePredictor tests.
 """
 
-import tempfile
 from pathlib import Path
+import tempfile
 from typing import Generator
 
 from omegaconf import DictConfig, OmegaConf

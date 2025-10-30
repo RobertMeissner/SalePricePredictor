@@ -46,4 +46,4 @@ class TestExperimentManager:
         # TODO: Fix ExperimentSetup model - it's not storing config_name/run_name correctly
         # The model seems to use struct mode which prevents attribute access
         # Either: 1) Make ExperimentSetup a dataclass, 2) Disable struct mode in config
-        assert hasattr(experiment, 'config')
+        assert hasattr(experiment, "config")

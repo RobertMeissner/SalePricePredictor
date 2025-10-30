@@ -7,7 +7,6 @@ from pathlib import Path
 
 from omegaconf import DictConfig, OmegaConf
 import pandas as pd
-import pytest
 
 from src.adapters.filesystem_repository import FileSystemDataRepository
 
@@ -84,9 +83,7 @@ class TestFileSystemDataRepository:
         assert "SalePrice" in df.columns
         pd.testing.assert_frame_equal(df, sample_dataframe)
 
-    def test_save_and_load_interim(
-        self, tmp_path: Path, sample_dataframe: pd.DataFrame
-    ):
+    def test_save_and_load_interim(self, tmp_path: Path, sample_dataframe: pd.DataFrame):
         """Test saving and loading interim data with metadata."""
         # Configure repository
         config = OmegaConf.create(

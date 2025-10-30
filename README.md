@@ -6,18 +6,15 @@
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Code Style](https://img.shields.io/badge/code%20style-ruff-000000.svg)
 
-A professional machine learning system for predicting house sale prices using scikit-learn, MLflow, and Hydra configuration management. Built with hexagonal architecture for maintainability and testability.
+A machine learning system for predicting house sale prices using scikit-learn, MLflow, and Hydra configuration management. Built with hexagonal architecture for maintainability and testability.
+Uses Ames House Pricing [Kaggle competition](https://www.kaggle.com/c/house-prices-advanced-regression-techniques)
 
 ## Key Features
 
 - **YAML-based Experiment Configuration**: Define entire ML experiments through simple YAML files with Hydra
 - **MLflow Integration**: Automatic experiment tracking and model versioning
 - **Hexagonal Architecture**: Clean separation between domain logic and infrastructure concerns
-- **Type Safety**: Full mypy type checking for production-ready code
-- **Comprehensive Testing**: >70% code coverage with pytest
-- **CI/CD Ready**: GitHub Actions workflows for testing and deployment
 - **Feature Engineering Pipeline**: Automated feature creation and selection
-- **Interactive Dashboard**: Streamlit interface for model exploration
 
 ## Installation
 
@@ -28,10 +25,8 @@ This project uses [uv](https://github.com/astral-sh/uv) for fast, reliable Pytho
 git clone https://github.com/RobertMeissner/SalePricePredictor.git
 cd SalePricePredictor
 
-# Install dependencies
 uv sync
 
-# Install pre-commit hooks
 uv run pre-commit install
 ```
 
@@ -41,56 +36,11 @@ uv run pre-commit install
 # Run an experiment with default configuration
 make experiment
 
-# Run with a specific configuration
-uv run salepricepredictor experiment --config-name experiment_with_feature_engineering
-
-# Run with custom run name
-uv run salepricepredictor experiment --run-name my-test-run
-
-# Preprocess data
-make preprocess
-
 # View MLflow tracking UI
 make mlflow
 
 # Launch interactive dashboard
 make dashboard
-```
-
-## Usage
-
-### CLI Commands
-
-The project provides a CLI through `salepricepredictor`:
-
-```bash
-# Run experiments
-uv run salepricepredictor experiment [--config-name CONFIG] [--run-name NAME]
-
-# Preprocess data
-uv run salepricepredictor preprocess [--config CONFIG]
-
-# Train models (coming soon)
-uv run salepricepredictor train [--config CONFIG]
-```
-
-### Makefile Targets
-
-```bash
-make requirements      # Install dependencies
-make test              # Run tests
-make test-cov          # Run tests with coverage report
-make coverage          # Generate HTML coverage report
-make lint              # Check code formatting
-make format            # Auto-format code
-make typecheck         # Run mypy type checking
-make security          # Run security scans (bandit + safety)
-make check             # Run all checks (lint + format + typecheck)
-make experiment        # Run default experiment
-make mlflow            # Launch MLflow UI
-make dashboard         # Launch Streamlit dashboard
-make docs              # Build and serve documentation
-make clean             # Remove Python artifacts
 ```
 
 ## Configuration
@@ -125,9 +75,6 @@ data:
 
 You can override configurations from the command line:
 
-```bash
-uv run salepricepredictor experiment --config-name experiment run_name=test-run
-```
 
 ## Architecture
 
@@ -199,21 +146,6 @@ uv run pre-commit install
 uv run pre-commit run --all-files
 ```
 
-## Testing
-
-The project maintains >70% test coverage with comprehensive unit and integration tests:
-
-```
-tests/
-├── unit/
-│   ├── test_feature_engineering.py
-│   ├── test_feature_selection.py
-│   ├── test_sklearn_pipeline_builder.py
-│   └── test_config_parser.py
-└── integration/
-    └── test_feature_pipeline.py
-```
-
 ## MLflow Tracking
 
 All experiments are automatically tracked in MLflow:
@@ -256,7 +188,7 @@ Tracked metrics include:
 Full documentation is available:
 
 - **Local**: Run `make docs` and visit http://localhost:8000
-- **Online**: Visit [project documentation](https://robertmeissner.github.io/SalePricePredictor/) (after GitHub Pages setup)
+- **Online**: Visit [project documentation](https://robertmeissner.github.io/SalePricePredictor/)
 
 ## Contributing
 

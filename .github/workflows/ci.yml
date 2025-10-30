@@ -2,65 +2,60 @@ name: CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.12"]
+        python-version: [ "3.12" ]
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Install uv
-      uses: astral-sh/setup-uv@v5
-      with:
-        version: "latest"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
 
-    - name: Set up Python ${{ matrix.python-version }}
-      run: uv python install ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
 
-    - name: Install dependencies
-      run: uv sync
+      - name: Install dependencies
+        run: uv sync
 
-    - name: Run tests with coverage
-      run: uv run pytest tests --cov=src --cov-report=xml --cov-report=term-missing
+      - name: Run tests with coverage
+        run: uv run pytest tests --cov=src --cov-report=xml --cov-report=term-missing
 
-    - name: Check coverage threshold
-      run: |
-        uv run coverage report --fail-under=70
+      - name: Check coverage threshold
+        run: |
+          uv run coverage report --fail-under=70
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        file: ./coverage.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
 
-    - name: Run ruff linter
-      run: |
-        uv run ruff check src tests
+      - name: Run ruff linter
+        run: |
+          uv run ruff check src tests
 
-    - name: Run ruff formatter check
-      run: |
-        uv run ruff format --check src tests
+      - name: Run ruff formatter check
+        run: |
+          uv run ruff format --check src tests
 
-    - name: Run mypy type checking
-      run: |
-        uv run mypy src
-      continue-on-error: true
+      - name: Run mypy type checking
+        run: |
+          uv run mypy src
+        continue-on-error: true
 
-    - name: Run security scan with bandit
-      run: |
-        uv run bandit -c pyproject.toml -r src
-      continue-on-error: true
-
-    - name: Run safety check
-      run: |
-        uv run safety check
-      continue-on-error: true
+      - name: Run security scan with bandit
+        run: |
+          uv run bandit -c pyproject.toml -r src
+        continue-on-error: true
