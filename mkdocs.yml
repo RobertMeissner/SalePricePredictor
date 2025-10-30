@@ -51,7 +51,13 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Presentation:
+  - Audience-Specific (15 min):
+    - Guide & Overview: presentation/README.md
+    - For Senior Developer: presentation/FOR-SENIOR-DEV.md
+    - For ML Engineer: presentation/FOR-ML-ENGINEER.md
+    - For Product Owner: presentation/FOR-PRODUCT-OWNER.md
+    - Realistic Timing Analysis: presentation/REALISTIC-TIMING.md
+  - Original Presentation (25-30 min):
     - 1. Problem & Motivation: presentation/01-problem.md
     - 2. Solution & Architecture: presentation/02-solution.md
     - 3. Live Demo: presentation/03-demo.md

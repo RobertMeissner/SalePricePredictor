@@ -1,6 +1,77 @@
 # Tech Interview Presentation Guide
 
-This directory contains a complete 15-minute tech interview presentation for the SalePricePredictor project.
+This directory contains **multiple versions** of a 15-minute tech interview presentation for the SalePricePredictor project, tailored to different audiences.
+
+## ⚠️ IMPORTANT: The Original Presentation is Too Long!
+
+**Reality check**: The original 5-section presentation (01-problem.md through 05-qa.md) contains **25-30 minutes** of content, not 15 minutes.
+
+**Solution**: Use the **audience-specific versions** below that are **actually 15 minutes**.
+
+---
+
+## Choose Your Audience 🎯
+
+### Option 1: Senior Developer Interview 👨‍💻
+**File**: [FOR-SENIOR-DEV.md](FOR-SENIOR-DEV.md)
+
+**Focus**: Architecture, code quality, production readiness
+
+**Structure** (13 min + 2 min Q&A):
+- Opening (1.5 min)
+- Architecture Deep Dive (5 min) ⭐
+- Code Quality (3 min)
+- Testing Demo (2 min)
+- Production Considerations (3 min)
+- Key Takeaways (1 min)
+
+**What to show**: Architecture diagrams, test coverage, `make test` demo
+
+---
+
+### Option 2: ML Engineer Interview 🤖
+**File**: [FOR-ML-ENGINEER.md](FOR-ML-ENGINEER.md)
+
+**Focus**: Feature engineering, experiment tracking, model performance
+
+**Structure** (13 min + 2 min Q&A):
+- Opening (1 min)
+- Feature Engineering (4 min) ⭐
+- Experiment Tracking Demo (4 min) ⭐
+- Model Performance (3 min)
+- Technical Insights (2 min)
+- Key Takeaways (1 min)
+
+**What to show**: YAML config, MLflow UI, feature importance
+
+---
+
+### Option 3: Product Owner Interview 📊
+**File**: [FOR-PRODUCT-OWNER.md](FOR-PRODUCT-OWNER.md)
+
+**Focus**: Business value, user impact, tangible deliverables
+
+**Structure** (13 min + 2 min Q&A):
+- Business Problem (3 min) ⭐
+- The Solution (2 min)
+- Interactive Demo (5 min) ⭐ Streamlit dashboard
+- Results & Business Impact (3 min)
+- Roadmap (2 min)
+- Key Takeaways (1 min)
+
+**What to show**: Streamlit dashboard, business metrics, ROI
+
+---
+
+## Quick Reference: What Each Audience Cares About
+
+| Audience | Wants to See | Doesn't Care About |
+|----------|--------------|-------------------|
+| **Senior Developer** | Architecture, testing, code quality, scalability | ML metrics, feature engineering |
+| **ML Engineer** | Feature engineering, model performance, experiments | Architecture patterns, code coverage |
+| **Product Owner** | Business value, user impact, ROI, roadmap | Architecture, ML details, code |
+
+---
 
 ## How to Use
 
@@ -12,6 +83,8 @@ make presentation
 ```
 
 This will start a local web server and open the presentation at `http://localhost:8000`.
+
+**Then navigate to the appropriate audience-specific page**.
 
 ### Navigation
 
