@@ -30,6 +30,7 @@ The Dataset: Ames Housing
 2. **Maintainability** - Code that's easy to understand and modify
 3. **Configurability** - Change models/features without code changes
 4. **Observability** - Track experiments and model performance
+5. **Modularity** - Allow prediction independent of data and ML tooling
 
 ---
 
