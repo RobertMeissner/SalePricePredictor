@@ -2,7 +2,7 @@ from typing import Protocol
 
 from omegaconf import DictConfig
 
-from src.domain.models.experiment_models import ExperimentSetup, MetricsOutput
+from src.domain.models.experiment_models import ExperimentSetup
 
 
 class Experiment(Protocol):
@@ -16,5 +16,3 @@ class Experiment(Protocol):
     def config(self) -> DictConfig: ...
 
     def run(self) -> dict: ...
-
-    def metrics(self) -> MetricsOutput: ...

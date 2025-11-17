@@ -1,7 +1,7 @@
 import polars as pl
 import typer
 
-from config import RAW_DATA_DIR
+from src.config.paths import RAW_DATA_DIR
 
 app = typer.Typer()
 

@@ -61,6 +61,7 @@ force-sort-within-sections = true
 dev = [
     "statsmodels>=0.14.5",
     "streamlit>=1.50.0",
+    "ty>=0.0.1a26",
 ]
 
 [tool.isort]

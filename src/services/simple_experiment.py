@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from src.adapters.factory import create_data_repository
 from src.config.hydra_loader import load_config
 from src.config.paths import CONFIG_DIR, MLFLOW_TRACKING_URI
-from src.domain.models.experiment_models import ExperimentSetup, MetricsOutput
+from src.domain.models.experiment_models import ExperimentSetup
 from src.preprocessing.sklearn_pipeline_builder import build_pipeline
 from src.utils.build_model import _build_model
 
@@ -19,7 +19,7 @@ class SimpleExperiment:
     Implements Experiment handler
     """
 
-    def __init__(self, experiment: ExperimentSetup):
+    def __init__(self, experiment: ExperimentSetup) -> None:
         self._config = load_config(CONFIG_DIR, experiment.config_name)
         self._data_repository = create_data_repository(self._config)
 
@@ -118,5 +118,3 @@ class SimpleExperiment:
                 print(f"{metric_name}: {metric_value:.4f}")
 
             return metrics
-
-    def metrics(self) -> MetricsOutput: ...
