@@ -8,9 +8,9 @@ import plotly.express as px
 import polars as pl
 import streamlit as st
 
-from config import CONFIG_DIR
 from src.adapters.factory import create_data_repository
-from src.config_parser import load_config
+from src.config.hydra_loader import load_config
+from src.config.paths import CONFIG_DIR
 
 # Page configuration
 st.set_page_config(page_title="House Sale Price Analysis", page_icon="🏠", layout="wide")

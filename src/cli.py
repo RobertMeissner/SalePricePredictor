@@ -15,8 +15,9 @@ def train(config: str = "default") -> None:
     """
     Train the model on a dataset.
     """
-    typer.echo("Training started.", fg="green")
-    typer.echo("Training done.", fg="green")
+    typer.echo(typer.style("Training started.", fg=typer.colors.GREEN, bold=True))
+    typer.echo(typer.style("Not implemented.", fg=typer.colors.RED, bold=True))
+    typer.echo(typer.style("Training done.", fg=typer.colors.GREEN, bold=True))
 
 
 @app.command("feature")
@@ -25,7 +26,7 @@ def feature(config: str = "default") -> None:
     Build features from interim dataset and store to processed
     """
 
-    typer.echo()
+    typer.echo(typer.style("Not implemented.", fg=typer.colors.RED, bold=True))
 
 
 @app.command("experiment")

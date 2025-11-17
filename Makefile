@@ -31,11 +31,6 @@ test:
 test-cov:
 	uv run pytest tests -v --cov=src --cov-report=term-missing --cov-report=html
 
-.PHONY: coverage
-coverage:
-	uv run pytest tests --cov=src --cov-report=html
-	@echo "Coverage report generated in htmlcov/index.html"
-
 .PHONY: typecheck
 typecheck:
 	uv run mypy src

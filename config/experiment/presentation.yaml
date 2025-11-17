@@ -1,0 +1,26 @@
+preprocessing:
+  drop_columns: # too little data
+    - PoolQC
+    - MiscFeature
+
+  remove_outliers:
+    GrLivArea:
+      greaterthan: 4000
+
+
+  imputation:
+    numerical_strategy: median
+    categorical_strategy: mode
+    exclude_columns: &exclude_columns
+      - Id
+      - SalePrice
+
+  pipeline:
+    - step: drop_columns
+    - step: remove_outliers
+    - step: categorical_transforms
+
+model:
+  regression_model: "linear"
+  features:
+    - GrLivArea

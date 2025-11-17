@@ -171,7 +171,7 @@ Tracked metrics include:
 ├── data/
 │   ├── raw/            # Original immutable data
 │   ├── interim/        # Intermediate processed data
-│   └── processed/      # Final datasets for modeling
+│   └── processed/      # Final datasets for modeling, TBD
 ├── docs/               # MkDocs documentation
 ├── models/             # Trained models and predictions
 ├── notebooks/          # Jupyter notebooks for exploration
